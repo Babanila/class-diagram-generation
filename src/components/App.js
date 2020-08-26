@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { cx, css } from 'emotion'
-// import PageHeader from './PageHeader'
+import PageHeader from './PageHeader'
+import IntroPage from './IntroPage'
 import NotFound404 from './NotFound404'
 
 const rootDiv = css`
@@ -14,11 +15,9 @@ const rootDiv = css`
 function App() {
   return (
     <div className={cx(rootDiv)}>
-      {/* <PageHeader /> */}
+      <PageHeader />
       <Switch>
-        {/* <Route exact path="/" render={(props) => <CustomerList {...props} />} />
-        <Route path="/customer/:id" render={(props) => <CustomerDetails {...props} />} />
-        <Route path="/new_customer" render={(props) => <CustomerForm {...props} />} /> */}
+        <Route exact path="/" render={(props) => <IntroPage {...props} />} />
         <Route component={NotFound404} />
       </Switch>
     </div>

@@ -11,3 +11,7 @@ npm-debug.log*
 
 # dotenv environment variables file
 .env
+
+# Mac OS cloud files
+icloud
+*.icloud
