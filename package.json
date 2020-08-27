@@ -12,8 +12,8 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "clean-webpack-plugin": "^3.0.0",
     "emotion": "^10.0.27",
-    "express": "^4.17.1",
     "natural": "^2.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
