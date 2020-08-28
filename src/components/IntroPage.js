@@ -1,7 +1,9 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { css, cx } from 'emotion'
 import UserInput from './UserInput'
 import SingleButton from './SingleButton'
+import { UserInputData } from '../utils/helpers'
 
 const introPageDiv = css`
   margin-top: 100px;
@@ -44,14 +46,26 @@ const processBtnStyle = css`
   }
 `
 
-const IntroPage = () => {
-  const handleUserInput = () => {}
-  const handleDataProcess = () => {}
+function IntroPage() {
+  const { state, dispatch } = React.useContext(UserInputData)
+  const [inputText, setInputText] = React.useState(state.userInput)
+  const history = useHistory()
+
+  const handleUserInput = ({ target }) => setInputText(target.value)
+
+  const handleDataProcess = () => {
+    dispatch({ type: 'UPDATE_INPUT', payload: inputText })
+    history.push('/uml-components')
+  }
 
   return (
     <div className={cx(introPageDiv)}>
       <div className={cx(introPageInnerDiv)}>
-        <UserInput userInputClick={handleUserInput} userInputStyles={userInputStyles} />
+        <UserInput
+          userInputClick={handleUserInput}
+          userInputStyles={userInputStyles}
+          value={inputText}
+        />
         <SingleButton btnName="Process" btnClick={handleDataProcess} btnStyles={processBtnStyle} />
       </div>
     </div>
