@@ -1,3 +1,4 @@
+const path = require('path')
 const HtmlWebPackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
@@ -25,6 +26,13 @@ module.exports = {
       }
     ]
   },
+  node: { fs: 'empty' },
+
+  resolve: {
+    modules: [path.resolve(__dirname, 'node_modules')],
+    extensions: ['.js', '.jsx', 'ts', '.tsx']
+  },
+
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebPackPlugin({
