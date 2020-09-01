@@ -4,12 +4,10 @@ const natural = require('natural')
 export const UserInputData = React.createContext()
 
 export const initialState = {
-  store: [],
-  userInput:
-    "And the table is theirs which is a type of ours, that is William's book which includes the main story.",
+  userInput: '',
   classes: [],
   relationships: [],
-  associations: []
+  compoundNoun: []
 }
 
 export function breakSentences(inputString, inputSymbol) {
@@ -43,4 +41,19 @@ export function removeDuplicate(arrayOfObject) {
     )
     return itemInAcc ? acc : acc.concat(element)
   }, [])
+}
+
+export function filterArrayByType(arr, filterByType = '') {
+  return filterByType !== '' ? arr.filter((item) => item.type === filterByType) : arr
+}
+
+export function displayArrayValues(arr) {
+  if (!Array.isArray(arr) || !arr || arr.length === 0) return 'Empty'
+  return (
+    <ul>
+      {arr.map((item, i) => (
+        <li key={i + 'x'}>{item.token}</li>
+      ))}
+    </ul>
+  )
 }

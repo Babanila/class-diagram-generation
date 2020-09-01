@@ -16,7 +16,7 @@ export function acexRule(arr) {
             endIndex: k + 2,
             type: 'compound-noun'
           })
-          acexInheritanceRelationship.push({ ...arr[k + 1], index: k + 1 })
+          acexInheritanceRelationship.push({ ...arr[k + 1], index: k + 1, type: 'inheritance' })
           acexAllClasses.push({ ...arr[k + 2], index: k + 2, type: 'actor' })
           return
         } else if (arr[k].tag === 'DT' && arr[k + 1].tag === 'NN') {
@@ -38,7 +38,7 @@ export function acexRule(arr) {
     }
   })
 
-  const acexClass = [acexInheritanceRelationship, acexCompoundNoun, acexAllClasses]
+  const acexClass = { acexInheritanceRelationship, acexCompoundNoun, acexAllClasses }
   return acexClass
 }
 
@@ -65,7 +65,7 @@ export function clexRule(arr, removeDuplicate) {
 
     // possessive Apostrophe (')
     if (arr[i].token === 's' && arr[i].tag === 'PRP') {
-      allClasses.push({ ...arr[i - 1], index: i - 1, type: 'class-by-apostrophe' })
+      allClasses.push({ ...arr[i - 1], index: i - 1, type: 'class' })
     }
 
     // Preposition (of, for, to etc.)
@@ -150,11 +150,11 @@ export function relpexRule(arr, removeDuplicate) {
       associationRelp.push({ ...element, index: i, type: 'association' })
     }
 
-    // Compostion & Aggregation Relationships
-    const compostionForm = ['include', 'contain', 'comprise', 'have', 'part of']
-    if (compostionForm.includes(lemmatize.verb(element.token))) {
+    // Composition & Aggregation Relationships
+    const compositionForm = ['include', 'contain', 'comprise', 'have', 'part of']
+    if (compositionForm.includes(lemmatize.verb(element.token))) {
       // change verb to basic form for identification purposes
-      compostionRelp.push({ ...element, index: i, type: 'compostion' }) // Compostion
+      compostionRelp.push({ ...element, index: i, type: 'composition' }) // Composition
       aggregationRelp.push({ ...element, index: i, type: 'aggregation' }) // Aggregation
     }
   })
@@ -172,11 +172,17 @@ export function relpexRule(arr, removeDuplicate) {
   })
 
   const relpexVerb = {
-    allVerbs: removeDuplicate([...allVerbs]),
     associationRelp,
     compostionRelp,
     aggregationRelp,
-    inheritanceRelp
+    inheritanceRelp,
+    allVerbs: removeDuplicate([...allVerbs]),
+    allRelationships: [
+      ...associationRelp,
+      ...compostionRelp,
+      ...aggregationRelp,
+      ...inheritanceRelp
+    ]
   }
   return relpexVerb
 }

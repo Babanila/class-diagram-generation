@@ -4,14 +4,12 @@ export function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case 'UPDATE_INPUT':
       return { ...state, userInput: payload }
-    case 'UPDATE_STORE':
-      return { ...state, store: payload }
     case 'UPDATE_CLASSES':
       return { ...state, classes: [...state.classes, payload] }
-    case 'UPDATE_RELATIONSHIP':
-      return { ...state, relationships: [...state.relationship, payload] }
-    case 'UPDATE_ASSOCIATION':
-      return { ...state, associations: [...state.association, payload] }
+    case 'UPDATE_RELATIONSHIPS':
+      return { ...state, relationships: [...state.relationships, payload] }
+    case 'UPDATE_COMPOUNDNOUN':
+      return { ...state, compoundNoun: [...state.compoundNoun, payload] }
     default:
       return state
   }
