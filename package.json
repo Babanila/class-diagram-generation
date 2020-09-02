@@ -2,18 +2,30 @@
   "name": "class-diagram-generation",
   "version": "1.0.0",
   "description": "Generation of Class Diagram from text ",
-  "author": "Babajide Williams <babanila@yahoo.com>",
-  "license": "ISC",
-  "private": false,
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production",
     "test": "jest",
     "test:watch": "jest --watch"
   },
+  "author": "Babajide Williams <babanila@yahoo.com>",
+  "license": "ISC",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Babanila/class-diagram-generation.git"
+  },
+  "keywords": [
+    "react",
+    "gojs",
+    "web",
+    "uml",
+    "diagram"
+  ],
   "dependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "emotion": "^10.0.27",
+    "gojs": "^2.1.23",
     "gojs-react": "^1.0.8",
     "natural": "^2.1.5",
     "react": "^16.13.1",
@@ -49,5 +61,11 @@
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

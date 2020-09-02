@@ -5959,6 +5959,11 @@ gojs-react@^1.0.8:
   dependencies:
     tslib "^2.0.1"
 
+gojs@^2.1.23:
+  version "2.1.23"
+  resolved "https://registry.yarnpkg.com/gojs/-/gojs-2.1.23.tgz#5e501c6ab2b5a197202559f4df1959a7d47f6890"
+  integrity sha512-HeW4TAomU9t73FTTmBOMdJN/xJIO5Fo0xd9G8+JOegzsYAkKV+rHn4MEyon/fSNvFWkXQajaYCtqPPic5GM+Tw==
+
 graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
