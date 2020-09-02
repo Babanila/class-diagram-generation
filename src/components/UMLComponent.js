@@ -1,13 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { css, cx } from 'emotion'
-import {
-  removeDuplicate,
-  UserInputData,
-  breakSentences,
-  tokenizerSentence,
-  posTagSentence
-} from '../utils/helpers'
+import { removeDuplicate, UserInputData, breakSentences, tokenizerSentence, posTagSentence } from '../utils/helpers'
 import { acexRule, clexRule, relpexRule, classExtraction } from '../utils/parsers'
 import SingleButton from './SingleButton'
 import ComponentDetails from './ComponentDetails'
@@ -154,15 +148,15 @@ function UMLComponent() {
       setAllData((allData) => allData.concat(responseData))
       dispatch({
         type: 'UPDATE_CLASSES',
-        payload: [...responseData.acexClass.acexAllClasses, ...responseData.clexClass]
+        payload: [...responseData.acexClass.acexAllClasses, ...responseData.clexClass],
       })
       dispatch({
         type: 'UPDATE_RELATIONSHIPS',
-        payload: [...responseData.relpexVerb.allRelationships]
+        payload: [...responseData.relpexVerb.allRelationships],
       })
       dispatch({
         type: 'UPDATE_COMPOUNDNOUN',
-        payload: [...responseData.acexClass.acexCompoundNoun]
+        payload: [...responseData.acexClass.acexCompoundNoun],
       })
     })
   }
@@ -181,11 +175,7 @@ function UMLComponent() {
         <div className={cx(tableTitleDiv)}>Sentence List</div>
         <div className={cx(btnDiv)}>
           <SingleButton btnName="Back" btnClick={handleGoBack} btnStyles={backBtnStyle} />
-          <SingleButton
-            btnName="View Diagram"
-            btnClick={handleDiagramGeneration}
-            btnStyles={diagramBtnStyle}
-          />
+          <SingleButton btnName="View Diagram" btnClick={handleDiagramGeneration} btnStyles={diagramBtnStyle} />
         </div>
       </div>
       <div className={cx(ptyHeaderDiv)}>
@@ -209,14 +199,6 @@ function UMLComponent() {
           </div>
         )}
       </div>
-      {/* <div className={cx(btnDiv)}>
-        <SingleButton btnName="Back" btnClick={handleGoBack} btnStyles={backBtnStyle} />
-        <SingleButton
-          btnName="View Diagram"
-          btnClick={handleDiagramGeneration}
-          btnStyles={diagramBtnStyle}
-        />
-      </div> */}
     </div>
   )
 }

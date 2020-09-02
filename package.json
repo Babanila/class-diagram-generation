@@ -14,13 +14,13 @@
   "dependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "emotion": "^10.0.27",
+    "gojs-react": "^1.0.8",
     "natural": "^2.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
-    "wink-lemmatizer": "^3.0.2",
-    "wordpos": "^2.0.0"
+    "wink-lemmatizer": "^3.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
