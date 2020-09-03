@@ -12,14 +12,14 @@ const tableRowDiv = css`
 
 const tableCellDiv = css`
   display: table-cell;
-  text-align: center;
   padding: 10px;
-  border-bottom: 1px solid black;
+  border: 1px solid black;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `
 
 function ComponentDetails({ id, singleData, onClick }) {
   const [allClasses, setAllClasses] = React.useState([])
-  const [compoundNoun, setCompoundNoun] = React.useState([])
   const [relationships, setRelationships] = React.useState([])
 
   React.useEffect(() => {
@@ -31,8 +31,6 @@ function ComponentDetails({ id, singleData, onClick }) {
     if (acexClass.acexAllClasses.length > 0) {
       setAllClasses((oldState) => oldState.concat(acexClass.acexAllClasses))
     }
-
-    if (acexClass.acexCompoundNoun.length > 0) setCompoundNoun(acexClass.acexCompoundNoun)
 
     if (acexClass.acexInheritanceRelationship.length > 0) {
       setRelationships((state) => [...state, ...acexClass.acexInheritanceRelationship])
@@ -48,20 +46,18 @@ function ComponentDetails({ id, singleData, onClick }) {
   return (
     <div className={cx(tableRowDiv)} onClick={() => onClick(id)}>
       <div className={cx(tableCellDiv)}>{id + 1}</div>
+      <div className={cx(tableCellDiv)}>{displayArrayValues(filterArrayByType(allClasses, 'type', 'class'))}</div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(allClasses, 'class'))}
+        {displayArrayValues(filterArrayByType(relationships, 'type', 'association'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'association'))}
+        {displayArrayValues(filterArrayByType(relationships, 'type', 'composition'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'composition'))}
+        {displayArrayValues(filterArrayByType(relationships, 'type', 'aggregation'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'aggregation'))}
-      </div>
-      <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'inheritance'))}
+        {displayArrayValues(filterArrayByType(relationships, 'type', 'inheritance'))}
       </div>
     </div>
   )

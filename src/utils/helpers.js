@@ -36,15 +36,14 @@ export function posTagSentence(inputString, lang = 'EN') {
 export function removeDuplicate(arrayOfObject) {
   return arrayOfObject.reduce((acc, element) => {
     const itemInAcc = acc.find(
-      (item) =>
-        item.token === element.token && item.index === element.index && item.type === element.type
+      (item) => item.token === element.token && item.index === element.index && item.type === element.type
     )
     return itemInAcc ? acc : acc.concat(element)
   }, [])
 }
 
-export function filterArrayByType(arr, filterByType = '') {
-  return filterByType !== '' ? arr.filter((item) => item.type === filterByType) : arr
+export function filterArrayByType(arr, propertyType, filterByType = '') {
+  return filterByType !== '' ? arr.filter((item) => item[propertyType] === filterByType) : arr
 }
 
 export function displayArrayValues(arr) {

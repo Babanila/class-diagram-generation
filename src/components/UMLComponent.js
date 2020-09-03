@@ -7,9 +7,8 @@ import SingleButton from './SingleButton'
 import ComponentDetails from './ComponentDetails'
 
 const umlCompDiv = css`
-  margin-top: 50px;
+  margin-top: 120px;
   width: 100%;
-  height: 689px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,6 +16,7 @@ const umlCompDiv = css`
   z-index: 10;
   background-color: transparent;
 `
+
 const ptyHeaderDiv = css`
   height: 30px;
   width: 80%;
@@ -39,13 +39,11 @@ const tableTopHeaderDiv = css`
 `
 
 const ptyCompDiv = css`
-  height: 60%;
   width: 80%;
   max-width: 1200px;
   display: table;
   margin-top: 1em;
   margin-bottom: 1em;
-  background-color: yellow;
 `
 
 const tableTitleHeaderDiv = css`
@@ -66,12 +64,14 @@ const tableTitleDiv = css`
 const tableHeaderDiv = css`
   display: table-cell;
   height: 30px;
+  max-width: 1200px;
   font-size: 20px;
   font-weight: bold;
   padding: 10px;
   text-align: center;
-  border-bottom: 1px solid black;
+  border: 1px solid black;
   background-color: #f6f6f6;
+  overflow-x: hidden;
   @media (max-width: 420px) {
     font-size: 16px;
   }
@@ -82,6 +82,7 @@ const tableBodyDiv = css`
 `
 
 const tableNullBody = css`
+  margin-top: 3em;
   display: table-caption;
   font-size: 20px;
   color: #f54b3a;
@@ -148,15 +149,15 @@ function UMLComponent() {
       setAllData((allData) => allData.concat(responseData))
       dispatch({
         type: 'UPDATE_CLASSES',
-        payload: [...responseData.acexClass.acexAllClasses, ...responseData.clexClass],
+        payload: [...responseData.acexClass.acexAllClasses, ...responseData.clexClass]
       })
       dispatch({
         type: 'UPDATE_RELATIONSHIPS',
-        payload: [...responseData.relpexVerb.allRelationships],
+        payload: [...responseData.relpexVerb.allRelationships]
       })
       dispatch({
         type: 'UPDATE_COMPOUNDNOUN',
-        payload: [...responseData.acexClass.acexCompoundNoun],
+        payload: [...responseData.acexClass.acexCompoundNoun]
       })
     })
   }
@@ -182,23 +183,23 @@ function UMLComponent() {
         <div className={cx(tableTopHeaderDiv)}>Components</div>
         <div className={cx(tableTopHeaderDiv)}>Relationships</div>
       </div>
-      <div className={cx(ptyCompDiv)}>
-        <div className={cx(tableHeaderDiv)}>No</div>
-        <div className={cx(tableHeaderDiv)}>Classes</div>
-        <div className={cx(tableHeaderDiv)}>Associations</div>
-        <div className={cx(tableHeaderDiv)}>Compostion</div>
-        <div className={cx(tableHeaderDiv)}>Aggregation</div>
-        <div className={cx(tableHeaderDiv)}>Inheritance</div>
-        {allData.length === 0 ? (
-          <div className={cx(tableNullBody)}> No Input Data</div>
-        ) : (
+      {allData.length === 0 ? (
+        <div className={cx(tableNullBody)}> No Input Data</div>
+      ) : (
+        <div className={cx(ptyCompDiv)}>
+          <div className={cx(tableHeaderDiv)}>No</div>
+          <div className={cx(tableHeaderDiv)}>Classes</div>
+          <div className={cx(tableHeaderDiv)}>Associations</div>
+          <div className={cx(tableHeaderDiv)}>Compostion</div>
+          <div className={cx(tableHeaderDiv)}>Aggregation</div>
+          <div className={cx(tableHeaderDiv)}>Inheritance</div>
           <div className={cx(tableBodyDiv)}>
             {allData.map((item, i) => (
               <ComponentDetails key={i} id={i} singleData={item} onClick={showClassDetails} />
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
