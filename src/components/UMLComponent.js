@@ -1,7 +1,14 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { css, cx } from 'emotion'
-import { removeDuplicate, UserInputData, breakSentences, tokenizerSentence, posTagSentence } from '../utils/helpers'
+import {
+  UserInputData,
+  breakSentences,
+  tokenizerSentence,
+  posTagSentence,
+  removeDuplicate,
+  commonWordsRemoval
+} from '../utils/helpers'
 import { acexRule, clexRule, relpexRule, classExtraction } from '../utils/parsers'
 import SingleButton from './SingleButton'
 import ComponentDetails from './ComponentDetails'
@@ -145,7 +152,7 @@ function UMLComponent() {
   const getClassAndReplAndAss = async (inpStr) => {
     const splitedString = await getIndividualDetails(inpStr)
     await splitedString.map((element) => {
-      const responseData = classExtraction(element, acexRule, clexRule, relpexRule, removeDuplicate)
+      const responseData = classExtraction(element, acexRule, clexRule, relpexRule, removeDuplicate, commonWordsRemoval)
       setAllData((allData) => allData.concat(responseData))
       dispatch({
         type: 'UPDATE_CLASSES',

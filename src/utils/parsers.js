@@ -1,35 +1,62 @@
 const lemmatize = require('wink-lemmatizer')
 
 // Actor Extractor
-export function acexRule(arr) {
+export function acexRule(arr, commonWordsRemoval) {
   const acexInheritanceRelationship = []
   const acexCompoundNoun = []
   const acexAllClasses = []
+  const { length: len } = arr
 
   arr.filter((element, i) => {
     if (element.token.toLowerCase() === 'as' && element.tag === 'IN') {
       for (let k = i + 1; k < i + 3; k++) {
         if (arr[k].tag === 'DT' && arr[k + 1].tag === 'JJ' && arr[k + 2].tag === 'NN') {
           acexCompoundNoun.push({
+            key: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             token: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             startIndex: k,
             endIndex: k + 2,
-            type: 'compound-noun'
+            type: 'compound-noun',
+            initIndex: i,
+            strLength: len
           })
-          acexInheritanceRelationship.push({ ...arr[k + 1], index: k + 1, type: 'inheritance' })
-          acexAllClasses.push({ ...arr[k + 2], index: k + 2, type: 'actor' })
+          acexInheritanceRelationship.push({
+            ...arr[k + 1],
+            key: arr[k + 1].token,
+            initIndex: i,
+            index: k + 1,
+            type: 'inheritance',
+            strLength: len
+          })
+          acexAllClasses.push({
+            ...arr[k + 2],
+            key: arr[k + 2].token,
+            initIndex: i,
+            index: k + 2,
+            type: 'actor',
+            strLength: len
+          })
           return
         } else if (arr[k].tag === 'DT' && arr[k + 1].tag === 'NN') {
           acexCompoundNoun.push({
+            key: `${arr[k].token} ${arr[k + 1].token}`,
             token: `${arr[k].token} ${arr[k + 1].token}`,
             startIndex: k,
             endIndex: k + 1,
-            type: 'compound-noun'
+            type: 'compound-noun',
+            strLength: len
           })
-          acexAllClasses.push({ ...arr[k + 1], index: k + 1, type: 'actor' })
+          acexAllClasses.push({
+            ...arr[k + 1],
+            key: arr[k + 1].token,
+            initIndex: i,
+            index: k + 1,
+            type: 'actor',
+            strLength: len
+          })
           return
         } else if (arr[k].tag === 'NN') {
-          acexAllClasses.push({ ...arr[k], index: k, type: 'actor' })
+          acexAllClasses.push({ ...arr[k], key: arr[k].token, initIndex: i, index: k, type: 'actor', strLength: len })
           return
         } else {
           return
@@ -38,34 +65,100 @@ export function acexRule(arr) {
     }
   })
 
-  const acexClass = { acexInheritanceRelationship, acexCompoundNoun, acexAllClasses }
+  const acexClass = {
+    acexInheritanceRelationship,
+    acexCompoundNoun,
+    // acexAllClasses
+    acexAllClasses: commonWordsRemoval(acexAllClasses)
+  }
   return acexClass
 }
 
 // Class Extractor
-export function clexRule(arr, removeDuplicate) {
+export function clexRule(arr, removeDuplicate, commonWordsRemoval) {
   const allClasses = []
+  const { length: len } = arr
   arr.filter((element, i) => {
     const verbForm = ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
     if (verbForm.includes(element.tag)) {
       // Subject
       for (let k = 0; k < i; k++) {
-        if (arr[k].tag === 'NN') allClasses.push({ ...arr[k], index: k, type: 'class' })
-        if (arr[k].tag === 'NNS') allClasses.push({ ...arr[k], index: k, type: 'class' })
-        if (arr[k].tag === 'NNP') allClasses.push({ ...arr[k], index: k, type: 'non-class' })
+        if (arr[k].tag === 'NN') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'class',
+            position: 'cl-subject',
+            strLength: len
+          })
+        }
+        if (arr[k].tag === 'NNS') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'class',
+            position: 'cl-subject',
+            strLength: len
+          })
+        }
+        if (arr[k].tag === 'NNP') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'non-class',
+            position: 'cl-subject',
+            strLength: len
+          })
+        }
       }
 
       // Object
       for (let k = i; k < arr.length; k++) {
-        if (arr[k].tag === 'NN') allClasses.push({ ...arr[k], index: k, type: 'class' })
-        if (arr[k].tag === 'NNS') allClasses.push({ ...arr[k], index: k, type: 'class' })
-        if (arr[k].tag === 'NNP') allClasses.push({ ...arr[k], index: k, type: 'non-class' })
+        if (arr[k].tag === 'NN') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'class',
+            position: 'cl-object',
+            strLength: len
+          })
+        }
+        if (arr[k].tag === 'NNS') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'class',
+            position: 'cl-object',
+            strLength: len
+          })
+        }
+        if (arr[k].tag === 'NNP') {
+          allClasses.push({
+            ...arr[k],
+            key: arr[k].token,
+            initIndex: i,
+            index: k,
+            type: 'non-class',
+            position: 'none-cl-object',
+            strLength: len
+          })
+        }
       }
     }
 
     // possessive Apostrophe (')
     if (arr[i].token === 's' && arr[i].tag === 'PRP') {
-      allClasses.push({ ...arr[i - 1], index: i - 1, type: 'class' })
+      allClasses.push({ ...arr[i - 1], key: arr[i - 1].token, initIndex: i - 1, index: i - 1, type: 'class' })
     }
 
     // Preposition (of, for, to etc.)
@@ -105,7 +198,8 @@ export function clexRule(arr, removeDuplicate) {
     }
   })
 
-  const clexClasses = [...removeDuplicate([...allClasses])]
+  const removeDuplicateClasses = [...removeDuplicate([...allClasses])]
+  const clexClasses = [...commonWordsRemoval([...removeDuplicateClasses])]
   return clexClasses
 }
 
@@ -177,21 +271,16 @@ export function relpexRule(arr, removeDuplicate) {
     aggregationRelp,
     inheritanceRelp,
     allVerbs: removeDuplicate([...allVerbs]),
-    allRelationships: [
-      ...associationRelp,
-      ...compostionRelp,
-      ...aggregationRelp,
-      ...inheritanceRelp
-    ]
+    allRelationships: [...associationRelp, ...compostionRelp, ...aggregationRelp, ...inheritanceRelp]
   }
   return relpexVerb
 }
 
-export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval) {
+export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval, commonWordsRemoval) {
   const classes = {}
 
-  classes.acexClass = rule1(inputArray)
-  classes.clexClass = rule2(inputArray, duplicateRemoval)
+  classes.acexClass = rule1(inputArray, commonWordsRemoval)
+  classes.clexClass = rule2(inputArray, duplicateRemoval, commonWordsRemoval)
   classes.relpexVerb = rule3(inputArray, duplicateRemoval)
   return classes
 }
