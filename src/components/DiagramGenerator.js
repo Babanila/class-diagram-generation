@@ -17,6 +17,7 @@ function DiagramGenerator({ umlData }) {
       'undoManager.isEnabled': true,
       'undoManager.maxHistoryLength': 0,
       'clickCreatingTool.archetypeNodeData': { name: 'new UML', color: 'lightblue' },
+
       // Layout setting
       layout: $(go.TreeLayout, {
         angle: 0,
@@ -105,6 +106,9 @@ function DiagramGenerator({ umlData }) {
       )
     )
 
+    // Link template
+    diagram.linkTemplate = $(go.Link, $(go.Shape))
+
     return diagram
   }
 
@@ -113,6 +117,9 @@ function DiagramGenerator({ umlData }) {
 
   const nodeDataArray = [...realClasses]
   const linkDataArray = [].concat(...relationshipConnection)
+
+  console.log('umlData.classes', umlData)
+  console.log('realClasses', realClasses)
 
   const handleModelChange = () => {}
   const diagramRef = React.createRef()

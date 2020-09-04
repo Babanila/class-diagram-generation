@@ -16,6 +16,8 @@ const introPageDiv = css`
   background-color: transparent;
 `
 const introPageInnerDiv = css`
+  width: 100%;
+  max-width: 630px;
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -26,8 +28,9 @@ const introPageInnerDiv = css`
 
 const userInputStyles = css`
   width: 100%;
+  max-width: 630px;
   min-width: 350px;
-  height: 150px;
+  height: 250px;
 `
 
 const processBtnStyle = css`
@@ -61,11 +64,7 @@ function IntroPage() {
   return (
     <div className={cx(introPageDiv)}>
       <div className={cx(introPageInnerDiv)}>
-        <UserInput
-          userInputClick={handleUserInput}
-          userInputStyles={userInputStyles}
-          value={inputText}
-        />
+        <UserInput userInputClick={handleUserInput} userInputStyles={userInputStyles} value={inputText} />
         <SingleButton btnName="Process" btnClick={handleDataProcess} btnStyles={processBtnStyle} />
       </div>
     </div>

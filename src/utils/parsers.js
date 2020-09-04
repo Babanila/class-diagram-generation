@@ -1,7 +1,7 @@
 const lemmatize = require('wink-lemmatizer')
 
 // Actor Extractor
-export function acexRule(arr, commonWordsRemoval) {
+export function acexRule(arr) {
   const acexInheritanceRelationship = []
   const acexCompoundNoun = []
   const acexAllClasses = []
@@ -69,13 +69,13 @@ export function acexRule(arr, commonWordsRemoval) {
     acexInheritanceRelationship,
     acexCompoundNoun,
     // acexAllClasses
-    acexAllClasses: commonWordsRemoval(acexAllClasses)
+    acexAllClasses: acexAllClasses
   }
   return acexClass
 }
 
 // Class Extractor
-export function clexRule(arr, removeDuplicate, commonWordsRemoval) {
+export function clexRule(arr, removeDuplicate) {
   const allClasses = []
   const { length: len } = arr
   arr.filter((element, i) => {
@@ -111,7 +111,7 @@ export function clexRule(arr, removeDuplicate, commonWordsRemoval) {
             key: arr[k].token,
             initIndex: i,
             index: k,
-            type: 'non-class',
+            type: 'class',
             position: 'cl-subject',
             strLength: len
           })
@@ -148,8 +148,8 @@ export function clexRule(arr, removeDuplicate, commonWordsRemoval) {
             key: arr[k].token,
             initIndex: i,
             index: k,
-            type: 'non-class',
-            position: 'none-cl-object',
+            type: 'class',
+            position: 'cl-object',
             strLength: len
           })
         }
@@ -198,8 +198,7 @@ export function clexRule(arr, removeDuplicate, commonWordsRemoval) {
     }
   })
 
-  const removeDuplicateClasses = [...removeDuplicate([...allClasses])]
-  const clexClasses = [...commonWordsRemoval([...removeDuplicateClasses])]
+  const clexClasses = [...removeDuplicate([...allClasses])]
   return clexClasses
 }
 
@@ -276,11 +275,11 @@ export function relpexRule(arr, removeDuplicate) {
   return relpexVerb
 }
 
-export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval, commonWordsRemoval) {
+export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval) {
   const classes = {}
 
-  classes.acexClass = rule1(inputArray, commonWordsRemoval)
-  classes.clexClass = rule2(inputArray, duplicateRemoval, commonWordsRemoval)
+  classes.acexClass = rule1(inputArray)
+  classes.clexClass = rule2(inputArray, duplicateRemoval)
   classes.relpexVerb = rule3(inputArray, duplicateRemoval)
   return classes
 }

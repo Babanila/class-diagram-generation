@@ -36,7 +36,12 @@ export function posTagSentence(inputString, lang = 'EN') {
 export function removeDuplicate(arrayOfObject) {
   return arrayOfObject.reduce(
     (acc, element) =>
-      acc.find((item) => item.token === element.token && item.index === element.index && item.type === element.type)
+      acc.find(
+        (item) =>
+          item.token.toLowerCase() === element.token.toLowerCase() &&
+          item.index === element.index &&
+          item.type === element.type
+      )
         ? acc
         : acc.concat(element),
     []
@@ -58,20 +63,8 @@ export function displayArrayValues(arr) {
   )
 }
 
-export function commonWordsRemoval(arrayOfObject) {
-  // const commonWords = ['application', 'system', 'data', 'computer', 'user', 'object', 'william']
-  // return arrayOfObject.reduce((acc, element) => {
-  //   return commonWords.includes(element.token.toLowerCase())
-  //     ? arrayOfObject.filter((item) => item.token !== element.token)
-  //     : acc
-  // }, [])
-  return arrayOfObject
-}
-
 export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filterByType) {
-  const arrayWithNoDup = arrayOfArray.map((element) =>
-    filterByType(filterByType(duplicateRemoval(element), 'tag', 'NN'), 'type', 'class')
-  )
+  const arrayWithNoDup = arrayOfArray.map((element) => filterByType(duplicateRemoval(element), 'type', 'class'))
   return [].concat(...arrayWithNoDup)
 }
 
@@ -79,11 +72,16 @@ export function relationshipConnectionArray(arrayOfArray) {
   const arrayWithNoDup = arrayOfArray.map((elements, i) => {
     const subjectClass = elements.filter((item) => item.position === 'cl-subject')
     const objectClass = elements.filter((item) => item.position === 'cl-object')
-    return objectClass.map((obj, j) => ({
-      key: `${i}+${j}`,
-      from: subjectClass[0].token ?? 'unknown',
-      to: obj.token ?? 'unknown'
-    }))
+
+    return subjectClass.length || subjectClass.objectClass
+      ? { from: subjectClass[0].token ?? 'default', to: objectClass[0].token ?? 'default' }
+      : {}
+    // return objectClass.map((obj, j) => ({
+    //   key: `-${i}+${j}`,
+    //   from: subjectClass[0].token ?? 'unknown',
+    //   to: obj.token ?? 'unknown'
+    // }))
+    // return { key: -i, from: subjectClass[0].token ?? 'default', to: objectClass[0].token ?? 'default' }
   })
   return arrayWithNoDup
 }
