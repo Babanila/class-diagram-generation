@@ -69,18 +69,10 @@ export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filt
 }
 
 export function relationshipConnectionArray(arrayOfArray) {
-  const arrayWithNoDup = arrayOfArray.map((elements, i) => {
+  const { classes, relationships } = arrayOfArray
+  const arrayWithNoDup = classes.map((elements, i) => {
     const subjectClass = elements.filter((item) => item.position === 'cl-subject')
     const objectClass = elements.filter((item) => item.position === 'cl-object')
-
-    // return subjectClass.length || subjectClass.objectClass
-    //   ? objectClass.map((obj, j) => ({
-    //       key: `-${i}+${j}`,
-    //       from: subjectClass[0].token ?? 'unknown',
-    //       to: obj.token ?? 'unknown'
-    //     }))
-    //   : {}
-
     return subjectClass.length || subjectClass.objectClass
       ? {
           token: -i,

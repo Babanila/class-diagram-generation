@@ -108,7 +108,7 @@ function DiagramGenerator({ umlData }) {
 
   const diagramRef = React.createRef()
   const realClasses = flattenWithNoDuplicateArray(umlData.classes, removeDuplicate, filterArrayByType)
-  const relationshipConnection = relationshipConnectionArray(umlData.classes)
+  const relationshipConnection = relationshipConnectionArray(umlData)
   const nodeDataArray = [...realClasses]
   const linkDataArray = [].concat(...relationshipConnection)
   const handleModelChange = () => {}
