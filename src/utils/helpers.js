@@ -73,15 +73,22 @@ export function relationshipConnectionArray(arrayOfArray) {
     const subjectClass = elements.filter((item) => item.position === 'cl-subject')
     const objectClass = elements.filter((item) => item.position === 'cl-object')
 
+    // return subjectClass.length || subjectClass.objectClass
+    //   ? objectClass.map((obj, j) => ({
+    //       key: `-${i}+${j}`,
+    //       from: subjectClass[0].token ?? 'unknown',
+    //       to: obj.token ?? 'unknown'
+    //     }))
+    //   : {}
+
     return subjectClass.length || subjectClass.objectClass
-      ? { from: subjectClass[0].token ?? 'default', to: objectClass[0].token ?? 'default' }
+      ? {
+          token: -i,
+          from: subjectClass[0].token ?? 'default',
+          to: objectClass[0].token ?? 'default',
+          routing: go.Link.Orthogonal
+        }
       : {}
-    // return objectClass.map((obj, j) => ({
-    //   key: `-${i}+${j}`,
-    //   from: subjectClass[0].token ?? 'unknown',
-    //   to: obj.token ?? 'unknown'
-    // }))
-    // return { key: -i, from: subjectClass[0].token ?? 'default', to: objectClass[0].token ?? 'default' }
   })
   return arrayWithNoDup
 }

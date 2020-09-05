@@ -13,35 +13,39 @@ function DiagramGenerator({ umlData }) {
   const initDiagram = () => {
     const $ = go.GraphObject.make
     const diagram = $(go.Diagram, {
-      initialContentAlignment: go.Spot.LeftCenter,
+      // Diagram movement setting
       'undoManager.isEnabled': true,
       'undoManager.maxHistoryLength': 0,
-      'clickCreatingTool.archetypeNodeData': { name: 'new UML', color: 'lightblue' },
-
-      // Layout setting
-      layout: $(go.TreeLayout, {
-        angle: 0,
-        arrangement: go.TreeLayout.ArrangementVertical,
-        treeStyle: go.TreeLayout.StyleLayered
-      }),
-
-      // Diagram movement setting
       isReadOnly: false,
       allowHorizontalScroll: true,
       allowVerticalScroll: true,
       allowSelect: true,
       contentAlignment: go.Spot.LeftCenter,
 
-      // Model setting
+      // Layout Settings
+      layout: $(
+        go.LayeredDigraphLayout, // this will be discussed in a later section
+        { columnSpacing: 5, setsPortSpots: false }
+      ),
+
+      // Link Settings
+      linkTemplate: $(go.Link, new go.Binding('routing', 'routing'), $(go.Shape)),
+
+      // Model settings
       model: $(go.GraphLinksModel, {
-        linkKeyProperty: 'key' // This should always be set for merges and data sync when using GraphLinksModel
+        linkKeyProperty: 'token', // This should always be set for merges and data sync when using GraphLinksModel
+        nodeKeyProperty: 'token'
       })
     })
 
-    // Node template
+    // Node Template Settings
     diagram.nodeTemplate = $(
       go.Node,
       'Auto',
+      {
+        fromSpot: go.Spot.Right, // coming out from middle-right
+        toSpot: go.Spot.Left // going into at middle-left
+      },
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
       $(
         go.Shape,
@@ -53,6 +57,7 @@ function DiagramGenerator({ umlData }) {
       $(
         go.Panel,
         'Table',
+        // Row 1:
         $(
           go.TextBlock,
           'alignment: Center',
@@ -63,10 +68,10 @@ function DiagramGenerator({ umlData }) {
             margin: 5,
             font: 'bold 15pt sans-serif'
           },
-          new go.Binding('text', 'key').makeTwoWay() // Setting the classname
+          new go.Binding('text', 'token').makeTwoWay() // Setting the classname
         ),
 
-        // Horizontal line before row 1:
+        // Horizontal line after row 1:
         $(go.RowColumnDefinition, {
           row: 1,
           column: 0,
@@ -74,7 +79,14 @@ function DiagramGenerator({ umlData }) {
           separatorStroke: 'black'
         }),
 
-        // Horizontal line before row 2:
+        // Row 2:
+        $(go.TextBlock, '', {
+          row: 1,
+          column: 0,
+          margin: 8
+        }),
+
+        // Horizontal line after row 2:
         $(go.RowColumnDefinition, {
           row: 2,
           column: 0,
@@ -82,47 +94,24 @@ function DiagramGenerator({ umlData }) {
           separatorStroke: 'black'
         }),
 
-        $(go.TextBlock, 'attributes', {
-          row: 1,
-          column: 0,
-          margin: 8
-        }),
-        $(
-          go.TextBlock,
-          { row: 1, column: 1, margin: 5, editable: true },
-          new go.Binding('text', 'attributes').makeTwoWay() // Setting the attributes
-        ),
-
-        $(go.TextBlock, 'operations', {
+        // Row 3:
+        $(go.TextBlock, '', {
           row: 2,
           column: 0,
           margin: 8
-        }),
-        $(
-          go.TextBlock,
-          { row: 2, column: 1, margin: 5, editable: true },
-          new go.Binding('text', 'operations').makeTwoWay()
-        ) // Setting the operation
+        })
       )
     )
-
-    // Link template
-    diagram.linkTemplate = $(go.Link, $(go.Shape))
 
     return diagram
   }
 
+  const diagramRef = React.createRef()
   const realClasses = flattenWithNoDuplicateArray(umlData.classes, removeDuplicate, filterArrayByType)
   const relationshipConnection = relationshipConnectionArray(umlData.classes)
-
   const nodeDataArray = [...realClasses]
   const linkDataArray = [].concat(...relationshipConnection)
-
-  console.log('umlData.classes', umlData)
-  console.log('realClasses', realClasses)
-
   const handleModelChange = () => {}
-  const diagramRef = React.createRef()
 
   return (
     <ReactDiagram

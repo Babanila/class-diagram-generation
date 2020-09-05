@@ -12,7 +12,6 @@ export function acexRule(arr) {
       for (let k = i + 1; k < i + 3; k++) {
         if (arr[k].tag === 'DT' && arr[k + 1].tag === 'JJ' && arr[k + 2].tag === 'NN') {
           acexCompoundNoun.push({
-            key: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             token: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             startIndex: k,
             endIndex: k + 2,
@@ -22,7 +21,6 @@ export function acexRule(arr) {
           })
           acexInheritanceRelationship.push({
             ...arr[k + 1],
-            key: arr[k + 1].token,
             initIndex: i,
             index: k + 1,
             type: 'inheritance',
@@ -30,7 +28,6 @@ export function acexRule(arr) {
           })
           acexAllClasses.push({
             ...arr[k + 2],
-            key: arr[k + 2].token,
             initIndex: i,
             index: k + 2,
             type: 'actor',
@@ -39,7 +36,6 @@ export function acexRule(arr) {
           return
         } else if (arr[k].tag === 'DT' && arr[k + 1].tag === 'NN') {
           acexCompoundNoun.push({
-            key: `${arr[k].token} ${arr[k + 1].token}`,
             token: `${arr[k].token} ${arr[k + 1].token}`,
             startIndex: k,
             endIndex: k + 1,
@@ -48,7 +44,6 @@ export function acexRule(arr) {
           })
           acexAllClasses.push({
             ...arr[k + 1],
-            key: arr[k + 1].token,
             initIndex: i,
             index: k + 1,
             type: 'actor',
@@ -56,7 +51,13 @@ export function acexRule(arr) {
           })
           return
         } else if (arr[k].tag === 'NN') {
-          acexAllClasses.push({ ...arr[k], key: arr[k].token, initIndex: i, index: k, type: 'actor', strLength: len })
+          acexAllClasses.push({
+            ...arr[k],
+            initIndex: i,
+            index: k,
+            type: 'actor',
+            strLength: len
+          })
           return
         } else {
           return
@@ -68,7 +69,6 @@ export function acexRule(arr) {
   const acexClass = {
     acexInheritanceRelationship,
     acexCompoundNoun,
-    // acexAllClasses
     acexAllClasses: acexAllClasses
   }
   return acexClass
@@ -83,82 +83,63 @@ export function clexRule(arr, removeDuplicate) {
     if (verbForm.includes(element.tag)) {
       // Subject
       for (let k = 0; k < i; k++) {
-        if (arr[k].tag === 'NN') {
+        if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
-            key: arr[k].token,
+            token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',
             position: 'cl-subject',
             strLength: len
           })
-        }
-        if (arr[k].tag === 'NNS') {
+        } else if (arr[k].tag === 'NN' || arr[k].tag === 'NNS' || arr[k].tag === 'NNP' || arr[k].tag === 'NNPS') {
           allClasses.push({
             ...arr[k],
-            key: arr[k].token,
             initIndex: i,
             index: k,
             type: 'class',
             position: 'cl-subject',
             strLength: len
           })
-        }
-        if (arr[k].tag === 'NNP') {
-          allClasses.push({
-            ...arr[k],
-            key: arr[k].token,
-            initIndex: i,
-            index: k,
-            type: 'class',
-            position: 'cl-subject',
-            strLength: len
-          })
+        } else {
         }
       }
 
       // Object
       for (let k = i; k < arr.length; k++) {
-        if (arr[k].tag === 'NN') {
+        if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
-            key: arr[k].token,
+            token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',
             position: 'cl-object',
             strLength: len
           })
-        }
-        if (arr[k].tag === 'NNS') {
+        } else if (arr[k].tag === 'NN' || arr[k].tag === 'NNS' || arr[k].tag === 'NNP' || arr[k].tag === 'NNPS') {
           allClasses.push({
             ...arr[k],
-            key: arr[k].token,
             initIndex: i,
             index: k,
             type: 'class',
             position: 'cl-object',
             strLength: len
           })
-        }
-        if (arr[k].tag === 'NNP') {
-          allClasses.push({
-            ...arr[k],
-            key: arr[k].token,
-            initIndex: i,
-            index: k,
-            type: 'class',
-            position: 'cl-object',
-            strLength: len
-          })
+        } else {
         }
       }
     }
 
     // possessive Apostrophe (')
     if (arr[i].token === 's' && arr[i].tag === 'PRP') {
-      allClasses.push({ ...arr[i - 1], key: arr[i - 1].token, initIndex: i - 1, index: i - 1, type: 'class' })
+      allClasses.push({
+        ...arr[i - 1],
+        initIndex: i - 1,
+        index: i - 1,
+        type: 'class'
+      })
     }
 
     // Preposition (of, for, to etc.)
