@@ -75,7 +75,7 @@ export function acexRule(arr) {
 }
 
 // Class Extractor
-export function clexRule(arr, removeDuplicate) {
+export function clexRule(arr, removeDuplicate, removeCommonWords) {
   const allClasses = []
   const { length: len } = arr
   arr.filter((element, i) => {
@@ -179,7 +179,8 @@ export function clexRule(arr, removeDuplicate) {
     }
   })
 
-  const clexClasses = [...removeDuplicate([...allClasses])]
+  const remDupClass = [...removeDuplicate([...allClasses])]
+  const clexClasses = removeCommonWords([...remDupClass])
   return clexClasses
 }
 
@@ -225,7 +226,7 @@ export function relpexRule(arr, removeDuplicate) {
     }
 
     // Composition & Aggregation Relationships
-    const compositionForm = ['include', 'contain', 'comprise', 'have', 'part of']
+    const compositionForm = ['include', 'contain', 'comprise', 'have', 'part of', 'possess,']
     if (compositionForm.includes(lemmatize.verb(element.token))) {
       // change verb to basic form for identification purposes
       compostionRelp.push({ ...element, index: i, type: 'composition' }) // Composition
@@ -256,11 +257,11 @@ export function relpexRule(arr, removeDuplicate) {
   return relpexVerb
 }
 
-export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval) {
+export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval, deleteCommonWords) {
   const classes = {}
 
   classes.acexClass = rule1(inputArray)
-  classes.clexClass = rule2(inputArray, duplicateRemoval)
+  classes.clexClass = rule2(inputArray, duplicateRemoval, deleteCommonWords)
   classes.relpexVerb = rule3(inputArray, duplicateRemoval)
   return classes
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 const natural = require('natural')
+const pluralize = require('pluralize')
 
 export const UserInputData = React.createContext()
 
@@ -61,6 +62,13 @@ export function displayArrayValues(arr) {
       ))}
     </ul>
   )
+}
+
+export function removeGeneralizedWords(arrayOfObject) {
+  const commonWords = ['system', 'application']
+  return arrayOfObject.reduce((acc, item) => {
+    return commonWords.includes(pluralize.singular(item.token.toLowerCase())) ? acc : acc.concat(item)
+  }, [])
 }
 
 export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filterByType) {
