@@ -1,13 +1,13 @@
 const lemmatize = require('wink-lemmatizer')
 
 // Actor Extractor
-export function acexRule(arr) {
+export function actorExtraction(arr) {
   const acexInheritanceRelationship = []
   const acexCompoundNoun = []
   const acexAllClasses = []
   const { length: len } = arr
 
-  arr.filter((element, i) => {
+  arr.map((element, i) => {
     if (element.token.toLowerCase() === 'as' && element.tag === 'IN') {
       for (let k = i + 1; k < i + 3; k++) {
         if (arr[k].tag === 'DT' && arr[k + 1].tag === 'JJ' && arr[k + 2].tag === 'NN') {
@@ -75,10 +75,10 @@ export function acexRule(arr) {
 }
 
 // Class Extractor
-export function clexRule(arr, removeDuplicate, removeCommonWords) {
+export function classExtraction(arr, removeDuplicate, removeCommonWords) {
   const allClasses = []
   const { length: len } = arr
-  arr.filter((element, i) => {
+  arr.map((element, i) => {
     const verbForm = ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']
     if (verbForm.includes(element.tag)) {
       // Subject
@@ -86,7 +86,7 @@ export function clexRule(arr, removeDuplicate, removeCommonWords) {
         if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
-            token: `${arr[k].token}-${arr[k + 1]?.token}`,
+            // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',
@@ -111,7 +111,7 @@ export function clexRule(arr, removeDuplicate, removeCommonWords) {
         if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
-            token: `${arr[k].token}-${arr[k + 1]?.token}`,
+            // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',
@@ -184,7 +184,7 @@ export function clexRule(arr, removeDuplicate, removeCommonWords) {
   return clexClasses
 }
 
-export function relpexRule(arr, removeDuplicate) {
+export function relationshipsExtraction(arr, removeDuplicate) {
   const allVerbs = []
   const associationRelp = []
   const compostionRelp = []
@@ -257,11 +257,37 @@ export function relpexRule(arr, removeDuplicate) {
   return relpexVerb
 }
 
-export function classExtraction(inputArray, rule1, rule2, rule3, duplicateRemoval, deleteCommonWords) {
-  const classes = {}
+export function attributesExtraction(arr, removeDuplicate) {
+  const allAttributes = []
+  let filteredAttributes = []
 
-  classes.acexClass = rule1(inputArray)
-  classes.clexClass = rule2(inputArray, duplicateRemoval, deleteCommonWords)
-  classes.relpexVerb = rule3(inputArray, duplicateRemoval)
-  return classes
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].tag === 'N') {
+      filteredAttributes.push({ ...arr[i], type: 'attributes' })
+    }
+    if (arr[i].tag === 'NN' && arr[i + 1]?.tag === 'NN') {
+      allAttributes.push({ ...arr[i], token: `${arr[i].token}_${arr[i + 1].token}`, type: 'attributes' })
+    }
+  }
+
+  for (let k = 0; k < arr.length; k++) {
+    let count = arr.filter((x) => x.token == arr[k].token).length
+    if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN' && count > 1) {
+      filteredAttributes.push(...allAttributes.filter((item) => item.token.startsWith(`${arr[k].token}_`)))
+    } else if (arr[k].tag === 'NN' && count > 1) {
+      filteredAttributes.push(...allAttributes.filter((item) => item.token.startsWith(`${arr[k].token}_`)))
+    } else {
+    }
+  }
+
+  return removeDuplicate(filteredAttributes)
+}
+
+export function umlComponentExtraction(inputArray, rule1, rule2, rule3, rule4, duplicateRemoval, deleteCommonWords) {
+  const components = {}
+  components.actors = rule1(inputArray)
+  components.classes = rule2(inputArray, duplicateRemoval, deleteCommonWords)
+  components.relationships = rule3(inputArray, duplicateRemoval)
+  components.attributes = rule4(inputArray, duplicateRemoval)
+  return components
 }

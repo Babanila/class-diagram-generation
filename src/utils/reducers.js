@@ -6,6 +6,8 @@ export function reducer(state = initialState, { type, payload }) {
       return { ...state, userInput: payload }
     case 'UPDATE_CLASSES':
       return { ...state, classes: [...state.classes, payload] }
+    case 'UPDATE_ATTRIBUTES':
+      return { ...state, attributes: [...state.attributes, payload] }
     case 'UPDATE_RELATIONSHIPS':
       return { ...state, relationships: [...state.relationships, payload] }
     case 'UPDATE_COMPOUNDNOUN':

@@ -20,26 +20,29 @@ const tableCellDiv = css`
 
 function ComponentDetails({ id, singleData, onClick }) {
   const [allClasses, setAllClasses] = React.useState([])
-  const [relationships, setRelationships] = React.useState([])
+  const [allRelationships, setAllRelationships] = React.useState([])
+  const [allAttributes, setAllAttributes] = React.useState([])
 
   React.useEffect(() => {
     showAllDetails(singleData)
   }, [id, singleData])
 
   const showAllDetails = (incomingData) => {
-    const { acexClass, clexClass, relpexVerb } = incomingData
-    if (acexClass.acexAllClasses.length > 0) {
-      setAllClasses((oldState) => oldState.concat(acexClass.acexAllClasses))
+    const { actors, classes, relationships, attributes } = incomingData
+    if (actors.acexAllClasses.length > 0) {
+      setAllClasses((oldState) => oldState.concat(actors.acexAllClasses))
     }
 
-    if (acexClass.acexInheritanceRelationship.length > 0) {
-      setRelationships((state) => [...state, ...acexClass.acexInheritanceRelationship])
+    if (actors.acexInheritanceRelationship.length > 0) {
+      setAllRelationships((state) => [...state, ...actors.acexInheritanceRelationship])
     }
 
-    if (clexClass.length > 0) setAllClasses((oldClass) => oldClass.concat(clexClass))
+    if (classes.length > 0) setAllClasses((oldClass) => oldClass.concat(classes))
 
-    if (relpexVerb.allRelationships.length > 0) {
-      setRelationships((state) => [...state, ...relpexVerb.allRelationships])
+    if (attributes.length > 0) setAllAttributes((oldClass) => oldClass.concat(attributes))
+
+    if (relationships.allRelationships.length > 0) {
+      setAllRelationships((state) => [...state, ...relationships.allRelationships])
     }
   }
 
@@ -47,17 +50,18 @@ function ComponentDetails({ id, singleData, onClick }) {
     <div className={cx(tableRowDiv)} onClick={() => onClick(id)}>
       <div className={cx(tableCellDiv)}>{id + 1}</div>
       <div className={cx(tableCellDiv)}>{displayArrayValues(filterArrayByType(allClasses, 'type', 'class'))}</div>
+      <div className={cx(tableCellDiv)}>{displayArrayValues(filterArrayByType(allAttributes))}</div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'type', 'association'))}
+        {displayArrayValues(filterArrayByType(allRelationships, 'type', 'association'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'type', 'composition'))}
+        {displayArrayValues(filterArrayByType(allRelationships, 'type', 'composition'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'type', 'aggregation'))}
+        {displayArrayValues(filterArrayByType(allRelationships, 'type', 'aggregation'))}
       </div>
       <div className={cx(tableCellDiv)}>
-        {displayArrayValues(filterArrayByType(relationships, 'type', 'inheritance'))}
+        {displayArrayValues(filterArrayByType(allRelationships, 'type', 'inheritance'))}
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ export const UserInputData = React.createContext()
 export const initialState = {
   userInput: '',
   classes: [],
+  attributes: [],
   relationships: [],
   compoundNoun: []
 }
@@ -40,13 +41,24 @@ export function removeDuplicate(arrayOfObject) {
       acc.find(
         (item) =>
           item.token.toLowerCase() === element.token.toLowerCase() &&
-          item.index === element.index &&
+          // item.index === element.index &&
           item.type === element.type
       )
         ? acc
         : acc.concat(element),
     []
   )
+}
+
+export function appearancePercentage(str, word) {
+  const count = str
+    .trim()
+    .split(` `)
+    .filter((x) => x.toUpperCase() == word.toUpperCase()).length
+
+  const totalLength = str.length
+  const percentApp = count / totalLength
+  return { count, totalLength, percentApp }
 }
 
 export function filterArrayByType(arr, propertyType, filterByType = '') {
@@ -65,7 +77,7 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  const commonWords = ['system', 'application']
+  const commonWords = ['system', 'application', 'detail']
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(pluralize.singular(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])

@@ -9,7 +9,13 @@ import {
   removeDuplicate,
   removeGeneralizedWords
 } from '../utils/helpers'
-import { acexRule, clexRule, relpexRule, classExtraction } from '../utils/parsers'
+import {
+  actorExtraction,
+  classExtraction,
+  relationshipsExtraction,
+  attributesExtraction,
+  umlComponentExtraction
+} from '../utils/parsers'
 import SingleButton from './SingleButton'
 import ComponentDetails from './ComponentDetails'
 
@@ -152,26 +158,31 @@ function UMLComponent() {
   const getClassAndReplAndAss = async (inpStr) => {
     const splitedString = await getIndividualDetails(inpStr)
     await splitedString.map((element) => {
-      const responseData = classExtraction(
+      const responseData = umlComponentExtraction(
         element,
-        acexRule,
-        clexRule,
-        relpexRule,
+        actorExtraction,
+        classExtraction,
+        relationshipsExtraction,
+        attributesExtraction,
         removeDuplicate,
         removeGeneralizedWords
       )
       setAllData((allData) => allData.concat(responseData))
       dispatch({
         type: 'UPDATE_CLASSES',
-        payload: [...responseData.acexClass.acexAllClasses, ...responseData.clexClass]
+        payload: [...responseData.actors.acexAllClasses, ...responseData.classes]
+      })
+      dispatch({
+        type: 'UPDATE_ATTRIBUTES',
+        payload: [...responseData.attributes, ...responseData.attributes]
       })
       dispatch({
         type: 'UPDATE_RELATIONSHIPS',
-        payload: [...responseData.relpexVerb.allRelationships]
+        payload: [...responseData.relationships.allRelationships]
       })
       dispatch({
         type: 'UPDATE_COMPOUNDNOUN',
-        payload: [...responseData.acexClass.acexCompoundNoun]
+        payload: [...responseData.actors.acexCompoundNoun]
       })
     })
   }
@@ -203,6 +214,7 @@ function UMLComponent() {
         <div className={cx(ptyCompDiv)}>
           <div className={cx(tableHeaderDiv)}>No</div>
           <div className={cx(tableHeaderDiv)}>Classes</div>
+          <div className={cx(tableHeaderDiv)}>Attributes</div>
           <div className={cx(tableHeaderDiv)}>Associations</div>
           <div className={cx(tableHeaderDiv)}>Compostion</div>
           <div className={cx(tableHeaderDiv)}>Aggregation</div>

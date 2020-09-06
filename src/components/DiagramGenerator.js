@@ -5,7 +5,8 @@ import {
   filterArrayByType,
   removeDuplicate,
   flattenWithNoDuplicateArray,
-  relationshipConnectionArray
+  relationshipConnectionArray,
+  appearancePercentage
 } from '../utils/helpers'
 
 function DiagramGenerator({ umlData }) {
@@ -109,7 +110,15 @@ function DiagramGenerator({ umlData }) {
   const diagramRef = React.createRef()
   const realClasses = flattenWithNoDuplicateArray(umlData.classes, removeDuplicate, filterArrayByType)
   const relationshipConnection = relationshipConnectionArray(umlData)
-  const nodeDataArray = [...realClasses]
+
+  const filteredRealClass = realClasses.reduce((acc, cls) => {
+    const { count } = appearancePercentage(umlData.userInput, cls.token)
+    // console.log(count, '->', cls.token)
+    return count >= 1 ? acc.concat(cls) : acc
+  }, [])
+
+  // const nodeDataArray = [...realClasses]
+  const nodeDataArray = [...filteredRealClass]
   const linkDataArray = [].concat(...relationshipConnection)
   const handleModelChange = () => {}
 
