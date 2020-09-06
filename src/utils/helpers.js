@@ -38,12 +38,7 @@ export function posTagSentence(inputString, lang = 'EN') {
 export function removeDuplicate(arrayOfObject) {
   return arrayOfObject.reduce(
     (acc, element) =>
-      acc.find(
-        (item) =>
-          item.token.toLowerCase() === element.token.toLowerCase() &&
-          // item.index === element.index &&
-          item.type === element.type
-      )
+      acc.find((item) => item.token.toLowerCase() === element.token.toLowerCase() && item.type === element.type)
         ? acc
         : acc.concat(element),
     []
@@ -53,7 +48,7 @@ export function removeDuplicate(arrayOfObject) {
 export function appearancePercentage(str, word) {
   const count = str
     .trim()
-    .split(` `)
+    .split(/[ .]+/)
     .filter((x) => x.toUpperCase() == word.toUpperCase()).length
 
   const totalLength = str.length
@@ -77,7 +72,7 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  const commonWords = ['system', 'application', 'detail']
+  const commonWords = ['system', 'application', 'detail', 'address']
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(pluralize.singular(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
@@ -89,7 +84,7 @@ export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filt
 }
 
 export function relationshipConnectionArray(arrayOfArray) {
-  const { classes, relationships } = arrayOfArray
+  const { classes } = arrayOfArray
   const arrayWithNoDup = classes.map((elements, i) => {
     const subjectClass = elements.filter((item) => item.position === 'cl-subject')
     const objectClass = elements.filter((item) => item.position === 'cl-object')

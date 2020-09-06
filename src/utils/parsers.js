@@ -262,7 +262,7 @@ export function attributesExtraction(arr, removeDuplicate) {
   let filteredAttributes = []
 
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i].tag === 'N') {
+    if (arr[i].tag === 'N' && arr[i].token.includes('_')) {
       filteredAttributes.push({ ...arr[i], type: 'attributes' })
     }
     if (arr[i].tag === 'NN' && arr[i + 1]?.tag === 'NN') {
