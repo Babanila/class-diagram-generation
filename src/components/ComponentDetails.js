@@ -5,6 +5,7 @@ import { filterArrayByType, displayArrayValues } from '../utils/helpers'
 const tableRowDiv = css`
   display: table-row;
   background-color: #f6f6f6;
+  overflow-y: auto;
   &:hover {
     background-color: #e8f4f8;
   }
@@ -62,6 +63,9 @@ function ComponentDetails({ id, singleData, onClick }) {
       </div>
       <div className={cx(tableCellDiv)}>
         {displayArrayValues(filterArrayByType(allRelationships, 'type', 'inheritance'))}
+      </div>
+      <div className={cx(tableCellDiv)}>
+        {displayArrayValues(filterArrayByType(allRelationships, 'type', 'dependency'))}
       </div>
     </div>
   )

@@ -190,6 +190,7 @@ export function relationshipsExtraction(arr, removeDuplicate) {
   const compostionRelp = []
   const aggregationRelp = []
   const inheritanceRelp = []
+  const dependencyRelp = []
 
   arr.map((element, i) => {
     // Verb
@@ -234,15 +235,22 @@ export function relationshipsExtraction(arr, removeDuplicate) {
     }
   })
 
-  // Inheritance Relationship
-  // The verb "to be" connects the two objects then inheritance relationships exist ...
-  // ... between them with the object as the parent class.
-
-  const inheritanceForm = ['is kind of', 'is a type of', 'to be']
+  // The original source code/input string
   const stringForm = arr.map((item) => item.token).join(' ')
+  // Inheritance Relationship
+  // The verb "to be" connects the two objects then inheritance relationships exist between them with the object as the parent class.
+  const inheritanceForm = ['is kind of', 'is a type of', 'to be']
   inheritanceForm.map((element, i) => {
     if (stringForm.includes(element)) {
       inheritanceRelp.push({ token: element, index: i, type: 'inheritance' })
+    }
+  })
+
+  // Dependency Relationship
+  const dependencyForm = ['follows', 'require', 'uses', 'depends on', 'based on', 'rely on']
+  dependencyForm.map((element, i) => {
+    if (stringForm.includes(lemmatize.verb(element))) {
+      dependencyRelp.push({ token: element, index: i, type: 'dependency' })
     }
   })
 
@@ -251,8 +259,9 @@ export function relationshipsExtraction(arr, removeDuplicate) {
     compostionRelp,
     aggregationRelp,
     inheritanceRelp,
+    dependencyRelp,
     allVerbs: removeDuplicate([...allVerbs]),
-    allRelationships: [...associationRelp, ...compostionRelp, ...aggregationRelp, ...inheritanceRelp]
+    allRelationships: [...associationRelp, ...compostionRelp, ...aggregationRelp, ...inheritanceRelp, ...dependencyRelp]
   }
   return relpexVerb
 }

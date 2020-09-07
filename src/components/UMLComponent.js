@@ -20,13 +20,12 @@ import SingleButton from './SingleButton'
 import ComponentDetails from './ComponentDetails'
 
 const umlCompDiv = css`
-  margin-top: 120px;
+  margin-top: 75px;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 10;
   background-color: transparent;
 `
 
@@ -36,7 +35,10 @@ const ptyHeaderDiv = css`
   max-width: 1200px;
   display: table;
   border: 1px solid black;
-  background-color: transparent;
+  background-color: #ffffff;
+  position: fixed;
+  top: 12em;
+  z-index: 80;
 `
 
 const tableTopHeaderDiv = css`
@@ -55,16 +57,21 @@ const ptyCompDiv = css`
   width: 80%;
   max-width: 1200px;
   display: table;
-  margin-top: 1em;
+  margin-top: 10em;
   margin-bottom: 1em;
 `
 
 const tableTitleHeaderDiv = css`
+  height: 6em;
   width: 80%;
   max-width: 1200px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.3em;
+  background-color: #ffffff;
+  position: fixed;
+  top: 6em;
+  z-index: 90;
 `
 
 const tableTitleDiv = css`
@@ -72,6 +79,7 @@ const tableTitleDiv = css`
   font-size: 26px;
   font-weight: bold;
   padding-top: 10px;
+  height: 50%;
 `
 
 const tableHeaderDiv = css`
@@ -85,6 +93,7 @@ const tableHeaderDiv = css`
   border: 1px solid black;
   background-color: #f6f6f6;
   overflow-x: hidden;
+  z-index: 100;
   @media (max-width: 420px) {
     font-size: 16px;
   }
@@ -103,6 +112,7 @@ const tableNullBody = css`
 
 const btnDiv = css`
   width: 260px;
+  height: 45%;
   display: flex;
   justify-content: space-between;
 `
@@ -219,6 +229,7 @@ function UMLComponent() {
           <div className={cx(tableHeaderDiv)}>Compostion</div>
           <div className={cx(tableHeaderDiv)}>Aggregation</div>
           <div className={cx(tableHeaderDiv)}>Inheritance</div>
+          <div className={cx(tableHeaderDiv)}>Dependency</div>
           <div className={cx(tableBodyDiv)}>
             {allData.map((item, i) => (
               <ComponentDetails key={i} id={i} singleData={item} onClick={showClassDetails} />

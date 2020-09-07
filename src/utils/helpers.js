@@ -1,6 +1,6 @@
 import React from 'react'
 const natural = require('natural')
-const pluralize = require('pluralize')
+const lemmatize = require('wink-lemmatizer')
 
 export const UserInputData = React.createContext()
 
@@ -74,7 +74,7 @@ export function displayArrayValues(arr) {
 export function removeGeneralizedWords(arrayOfObject) {
   const commonWords = ['system', 'application', 'detail', 'address']
   return arrayOfObject.reduce((acc, item) => {
-    return commonWords.includes(pluralize.singular(item.token.toLowerCase())) ? acc : acc.concat(item)
+    return commonWords.includes(lemmatize.noun(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
 }
 

@@ -44,4 +44,12 @@ RELPEX7: Aggregation relationship (participate) exists with verb that belongs to
 
 RELPEX8: In a sentence, if the subject and the direct object are classes and the verb "to be" connects the two objects then inheritance relationships exist between them with the object as the parent class.
 
-RELPEX9: Inheritance relationship exists in a sentence when words like "is kind of", "is a type of" etc.
+RELPEX9: Inheritance relationship exist in a sentence when words like "is kind of", "is a type of" etc.
+
+RELPEX10: Dependency relationship exists in a sentence when words like "follows","require","uses","depends on","based on","rely on" etc. are present.
+
+## ATTEXRule
+
+ATTEX1: attributes exist in a sentence when words are joined with "\_" and both words are nouns, the noun before the sign is the class while the noun after the sign is the attribute e.g "customer_name", etc.
+
+ATTEX2: In a sentence when two nouns follow each other with the later referring to the former, the latter is the attribute while the former is the class e.g "club name", "club age" etc.
