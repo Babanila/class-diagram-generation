@@ -177,23 +177,31 @@ function UMLComponent() {
         removeDuplicate,
         removeGeneralizedWords
       )
-      setAllData((allData) => allData.concat(responseData))
+
+      if(responseData.classes.length > 0 ){
+      setAllData((allData) => allData.concat(responseData )) 
+      
       dispatch({
         type: 'UPDATE_CLASSES',
         payload: [...responseData.actors.acexAllClasses, ...responseData.classes]
       })
+
       dispatch({
         type: 'UPDATE_ATTRIBUTES',
         payload: [...responseData.attributes, ...responseData.attributes]
       })
+
       dispatch({
         type: 'UPDATE_RELATIONSHIPS',
         payload: [...responseData.relationships.allRelationships]
       })
+
       dispatch({
         type: 'UPDATE_COMPOUNDNOUN',
         payload: [...responseData.actors.acexCompoundNoun]
       })
+
+      }
     })
   }
 

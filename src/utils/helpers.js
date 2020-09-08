@@ -5,7 +5,9 @@ const lemmatize = require('wink-lemmatizer')
 export const UserInputData = React.createContext()
 
 export const initialState = {
-  userInput: '',
+  userInput:
+    'The Library system is used by the Informatics Students and Faculty. The Library contains Books and Journals. Books can be issued to both the Students and Faculty. Journals can only be issued to the Faculty. Books and Journals can only be issued by the Librarian. The deputy-Librarian is in-charge of receiving the Returned Books and Journals. The Accountant is responsible for receiving the fine for over-due Books. Fine is charged only to Students, and not to the Faculty.',
+  // 'The cashier stored the customer details like  customer_name, customer_age,  and customer_address. The player saved the club details which includes the club name, club age,  and club address.',
   classes: [],
   attributes: [],
   relationships: [],
@@ -57,7 +59,7 @@ export function appearancePercentage(str, word) {
 }
 
 export function filterArrayByType(arr, propertyType, filterByType = '') {
-  return filterByType !== '' ? arr.filter((item) => item[propertyType] === filterByType) : arr
+  return filterByType !== '' ? arr.filter((item) => item.token !== '' && item[propertyType] === filterByType) : arr
 }
 
 export function displayArrayValues(arr) {
@@ -72,7 +74,8 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  const commonWords = ['system', 'application', 'detail', 'address']
+  // const commonWords = ['system', 'application', 'detail', 'address']
+  const commonWords = []
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(lemmatize.noun(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
@@ -83,19 +86,37 @@ export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filt
   return [].concat(...arrayWithNoDup)
 }
 
+export function uniqueArrayOfObject(arrayOfObject){
+  return arrayOfObject.filter(item => item).reduce(
+    (acc, element) =>
+      acc.find((item) => item.from.toLowerCase() === element.from.toLowerCase() && item.to.toLowerCase() === element.to.toLowerCase())
+        ? acc
+        : acc.concat(element),
+    []
+  )
+} 
+
+
 export function relationshipConnectionArray(arrayOfArray) {
   const { classes } = arrayOfArray
-  const arrayWithNoDup = classes.map((elements, i) => {
-    const subjectClass = elements.filter((item) => item.position === 'cl-subject')
-    const objectClass = elements.filter((item) => item.position === 'cl-object')
-    return subjectClass.length || subjectClass.objectClass
-      ? {
-          token: -i,
-          from: subjectClass[0].token ?? 'default',
-          to: objectClass[0].token ?? 'default',
-          routing: go.Link.Orthogonal
-        }
-      : {}
+  const arrayWithNoDup = []
+  
+  classes.map((elements, i) => {
+    const subjectClass = elements.filter((item) =>  item.position === 'cl-subject')
+    const objectClass = elements.filter((item) =>  item.position === 'cl-object')
+
+    if(subjectClass.length > 0 && objectClass.length > 0){
+      subjectClass.map(subjItem => {
+        objectClass.map(objItem => {
+          arrayWithNoDup.push ({
+            from: subjItem.token,
+            to: objItem.token,
+            routing: go.Link.Orthogonal
+          })
+        })
+      })
+    }
   })
-  return arrayWithNoDup
+
+  return uniqueArrayOfObject(arrayWithNoDup)
 }
