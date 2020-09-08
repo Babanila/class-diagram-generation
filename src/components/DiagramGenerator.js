@@ -30,7 +30,13 @@ function DiagramGenerator({ umlData }) {
       ),
 
       // Link Settings
-      linkTemplate: $(go.Link, new go.Binding('routing', 'routing'), $(go.Shape)),
+      linkTemplate: $(go.Link,
+       new go.Binding('routing', 'routing'),
+        $(go.Shape),  // the link shape
+      $(go.Shape,   // the arrowhead
+        { toArrow: "Standard" }
+        )
+      ),
 
       // Model settings
       model: $(go.GraphLinksModel, {
@@ -113,9 +119,10 @@ function DiagramGenerator({ umlData }) {
   
   const filteredRealClass = realClasses.reduce((acc, cls) => {
     const { count,totalLength,percentApp } = appearancePercentage(umlData.userInput, cls.token)
-    return count > 1 ? acc.concat(cls) : acc
+    return count > 0 ? acc.concat(cls) : acc
   }, [])
     
+  // const nodeDataArray = [...realClasses]
   const nodeDataArray = [...filteredRealClass]
   const linkDataArray = [].concat(...relationshipConnection)
   const handleModelChange = () => {}

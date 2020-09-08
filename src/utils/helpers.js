@@ -51,7 +51,8 @@ export function appearancePercentage(str, word) {
   const count = str
     .trim()
     .split(/[ .]+/)
-    .filter((x) => x.toUpperCase() == word.toUpperCase()).length
+    .filter((x) => lemmatize.noun(x.toLowerCase()) == lemmatize.noun(word.toLowerCase())).length
+    // .filter((x) => x.toUpperCase() == word.toUpperCase()).length
 
   const totalLength = str.length
   const percentApp = count / totalLength
@@ -98,21 +99,62 @@ export function uniqueArrayOfObject(arrayOfObject){
 
 
 export function relationshipConnectionArray(arrayOfArray) {
-  const { classes } = arrayOfArray
+  const { classes, relationships } = arrayOfArray
   const arrayWithNoDup = []
   
   classes.map((elements, i) => {
+    const relationConnection = relationships[i]
     const subjectClass = elements.filter((item) =>  item.position === 'cl-subject')
     const objectClass = elements.filter((item) =>  item.position === 'cl-object')
 
     if(subjectClass.length > 0 && objectClass.length > 0){
       subjectClass.map(subjItem => {
-        objectClass.map(objItem => {
-          arrayWithNoDup.push ({
-            from: subjItem.token,
-            to: objItem.token,
-            routing: go.Link.Orthogonal
-          })
+        objectClass.map((objItem,j) => {
+          if(relationConnection[j]?.type === 'association'){
+            arrayWithNoDup.push ({
+              from: subjItem.token,
+              to:  objItem.token,
+              routing: go.Link.Orthogonal,
+              relationshipType: relationConnection[j]?.type ?? 'none'
+            })
+          }
+
+          // if(relationConnection[j]?.type === 'composition'){
+          //   arrayWithNoDup.push ({
+          //     from: subjItem.token,
+          //     to:  objItem.token,
+          //     routing: go.Link.Orthogonal,
+          //     relationshipType: relationConnection[j]?.type ?? 'none'
+          //   })
+          // }
+
+          // if(relationConnection[j]?.type === 'aggregation'){
+          //   arrayWithNoDup.push ({
+          //     from: subjItem.token,
+          //     to:  objItem.token,
+          //     routing: go.Link.Orthogonal,
+          //     relationshipType: relationConnection[j]?.type ?? 'none'
+          //   })
+          // }
+
+          // if(relationConnection[j]?.type === 'inheritance'){
+          //   arrayWithNoDup.push ({
+          //     from: subjItem.token,
+          //     to:  objItem.token,
+          //     routing: go.Link.Orthogonal,
+          //     relationshipType: relationConnection[j]?.type ?? 'none'
+          //   })
+          // }
+
+          // if(relationConnection[j]?.type === 'dependency'){
+          //   arrayWithNoDup.push ({
+          //     from: subjItem.token,
+          //     to:  objItem.token,
+          //     routing: go.Link.Orthogonal,
+          //     relationshipType: relationConnection[j]?.type ?? 'none'
+          //   })
+          // }
+
         })
       })
     }
