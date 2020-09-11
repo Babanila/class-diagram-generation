@@ -12,6 +12,7 @@ export function actorExtraction(arr) {
       for (let k = i + 1; k < i + 3; k++) {
         if (arr[k].tag === 'DT' && arr[k + 1].tag === 'JJ' && arr[k + 2].tag === 'NN') {
           acexCompoundNoun.push({
+            id: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             token: `${arr[k].token} ${arr[k + 1].token} ${arr[k + 2].token}`,
             startIndex: k,
             endIndex: k + 2,
@@ -21,6 +22,7 @@ export function actorExtraction(arr) {
           })
           acexInheritanceRelationship.push({
             ...arr[k + 1],
+            id: arr[k + 1].token,
             initIndex: i,
             index: k + 1,
             type: 'inheritance',
@@ -28,6 +30,7 @@ export function actorExtraction(arr) {
           })
           acexAllClasses.push({
             ...arr[k + 2],
+            id: arr[k + 2].token,
             initIndex: i,
             index: k + 2,
             type: 'actor',
@@ -36,6 +39,7 @@ export function actorExtraction(arr) {
           return
         } else if (arr[k].tag === 'DT' && arr[k + 1].tag === 'NN') {
           acexCompoundNoun.push({
+            id: `${arr[k].token} ${arr[k + 1].token}`,
             token: `${arr[k].token} ${arr[k + 1].token}`,
             startIndex: k,
             endIndex: k + 1,
@@ -44,6 +48,7 @@ export function actorExtraction(arr) {
           })
           acexAllClasses.push({
             ...arr[k + 1],
+            id: arr[k + 1].token,
             initIndex: i,
             index: k + 1,
             type: 'actor',
@@ -53,6 +58,7 @@ export function actorExtraction(arr) {
         } else if (arr[k].tag === 'NN') {
           acexAllClasses.push({
             ...arr[k],
+            id: arr[k].token,
             initIndex: i,
             index: k,
             type: 'actor',
@@ -86,6 +92,7 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
         if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
+            id: arr[k].token,
             // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
@@ -96,6 +103,7 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
         } else if (arr[k].tag === 'NN' || arr[k].tag === 'NNS' || arr[k].tag === 'NNP' || arr[k].tag === 'NNPS') {
           allClasses.push({
             ...arr[k],
+            id: arr[k].token,
             initIndex: i,
             index: k,
             type: 'class',
@@ -111,6 +119,7 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
         if (arr[k].tag === 'NN' && arr[k + 1]?.tag === 'NN') {
           allClasses.push({
             ...arr[k],
+            id: arr[k].token,
             // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
@@ -121,6 +130,7 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
         } else if (arr[k].tag === 'NN' || arr[k].tag === 'NNS' || arr[k].tag === 'NNP' || arr[k].tag === 'NNPS') {
           allClasses.push({
             ...arr[k],
+            id: arr[k].token,
             initIndex: i,
             index: k,
             type: 'class',
@@ -136,6 +146,7 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
     if (arr[i].token === 's' && arr[i].tag === 'PRP') {
       allClasses.push({
         ...arr[i - 1],
+        id: arr[i - 1].token,
         initIndex: i - 1,
         index: i - 1,
         type: 'class'
@@ -150,11 +161,11 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
 
     if (condition2) {
       if (arr[i + 1].tag === 'DT' && arr[i + 2].tag === 'JJ' && arr[i + 3].tag === 'NN') {
-        allClasses.push({ ...arr[i + 3], index: i + 3, type: 'class' })
+        allClasses.push({ ...arr[i + 3], id: arr[i + 3].token, index: i + 3, type: 'class' })
       } else if (arr[i + 1].tag === 'DT' && arr[i + 2].tag === 'NN') {
-        allClasses.push({ ...arr[i + 2], index: i + 2, type: 'class' })
+        allClasses.push({ ...arr[i + 2], id: arr[i + 2].token, index: i + 2, type: 'class' })
       } else if (arr[i + 1].tag === 'NN') {
-        allClasses.push({ ...arr[i + 1], index: i + 1, type: 'class' })
+        allClasses.push({ ...arr[i + 1], id: arr[i + 1].token, index: i + 1, type: 'class' })
       } else {
         return null
       }
@@ -168,11 +179,11 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
 
     if (condition3) {
       if (arr[i + 1].tag === 'DT' && arr[i + 2].tag === 'JJ' && arr[i + 3].tag === 'NN') {
-        allClasses.push({ ...arr[i + 3], index: i + 3, type: 'class' })
+        allClasses.push({ ...arr[i + 3], id: arr[i + 3].token, index: i + 3, type: 'class' })
       } else if (arr[i + 1].tag === 'DT' && arr[i + 2].tag === 'NN') {
-        allClasses.push({ ...arr[i + 2], index: i + 2, type: 'class' })
+        allClasses.push({ ...arr[i + 2], id: arr[i + 2].token, index: i + 2, type: 'class' })
       } else if (arr[i + 1].tag === 'NN') {
-        allClasses.push({ ...arr[i + 1], index: i + 1, type: 'class' })
+        allClasses.push({ ...arr[i + 1], id: arr[i + 1].token, index: i + 1, type: 'class' })
       } else {
         return null
       }

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { css, cx } from 'emotion'
 import SingleButton from './SingleButton'
 import DiagramGenerator from './DiagramGenerator'
+import DiagramGeneratorSyncFusion from './DiagramGeneratorSyncFusion'
 import { UserInputData } from '../utils/helpers'
 
 const umlDiagDiv = css`
@@ -94,7 +95,7 @@ function UMLDiagram() {
         </div>
       </div>
       <div className={cx(diagDiv)}>
-        <DiagramGenerator umlData={state} />
+        <DiagramGeneratorSyncFusion umlData={state} />
       </div>
     </div>
   )

@@ -52,7 +52,7 @@ export function appearancePercentage(str, word) {
     .trim()
     .split(/[ .]+/)
     .filter((x) => lemmatize.noun(x.toLowerCase()) == lemmatize.noun(word.toLowerCase())).length
-    // .filter((x) => x.toUpperCase() == word.toUpperCase()).length
+  // .filter((x) => x.toUpperCase() == word.toUpperCase()).length
 
   const totalLength = str.length
   const percentApp = count / totalLength
@@ -87,33 +87,140 @@ export function flattenWithNoDuplicateArray(arrayOfArray, duplicateRemoval, filt
   return [].concat(...arrayWithNoDup)
 }
 
-export function uniqueArrayOfObject(arrayOfObject){
-  return arrayOfObject.filter(item => item).reduce(
-    (acc, element) =>
-      acc.find((item) => item.from.toLowerCase() === element.from.toLowerCase() && item.to.toLowerCase() === element.to.toLowerCase())
-        ? acc
-        : acc.concat(element),
-    []
-  )
-} 
+export function addSyncFusionParametersToArray(arrayOfObject) {
+  const modifiedArray = arrayOfObject.map((element, i) => {
+    return {
+      ...element,
+      offsetX: (i + 1) * 50,
+      offsetY: (i + 1) * 50,
+      annotations: [
+        {
+          id: element.token,
+          content: element.token
+        }
+      ]
+    }
+  })
+  return [].concat(...modifiedArray)
+}
 
+export function uniqueArrayOfObject(arrayOfObject) {
+  return arrayOfObject
+    .filter((item) => item)
+    .reduce(
+      (acc, element) =>
+        acc.find(
+          (item) =>
+            item.sourceID.toLowerCase() === element.sourceID.toLowerCase() &&
+            item.targetID.toLowerCase() === element.targetID.toLowerCase()
+        )
+          ? acc
+          : acc.concat(element),
+      []
+    )
+}
 
 export function relationshipConnectionArray(arrayOfArray) {
   const { classes, relationships } = arrayOfArray
   const arrayWithNoDup = []
-  
+
   classes.map((elements, i) => {
     const relationConnection = relationships[i]
-    const subjectClass = elements.filter((item) =>  item.position === 'cl-subject')
-    const objectClass = elements.filter((item) =>  item.position === 'cl-object')
+    const subjectClass = elements.filter((item) => item.position === 'cl-subject')
+    const objectClass = elements.filter((item) => item.position === 'cl-object')
 
-    if(subjectClass.length > 0 && objectClass.length > 0){
-      subjectClass.map(subjItem => {
-        objectClass.map((objItem,j) => {
-          if(relationConnection[j]?.type === 'association'){
-            arrayWithNoDup.push ({
+    if (subjectClass.length > 0 && objectClass.length > 0) {
+      subjectClass.map((subjItem) => {
+        objectClass.map((objItem, j) => {
+          if (relationConnection[j]?.type === 'association') {
+            arrayWithNoDup.push({
+              id: `${subjItem.token}+${objItem.token}+${j}`,
+              sourceID: subjItem.token,
+              targetID: objItem.token,
+              type: 'Straight',
+              shape: {
+                type: 'UmlClassifier',
+                relationship: 'Association'
+              }
+            })
+          }
+
+          if (relationConnection[j]?.type === 'composition') {
+            arrayWithNoDup.push({
+              id: `${subjItem.token}+${objItem.token}+${j}`,
+              sourceID: subjItem.token,
+              targetID: objItem.token,
+              type: 'Straight',
+              shape: {
+                type: 'UmlClassifier',
+                relationship: 'Composition'
+              }
+            })
+          }
+
+          if (relationConnection[j]?.type === 'aggregation') {
+            arrayWithNoDup.push({
+              id: `${subjItem.token}+${objItem.token}+${j}`,
+              sourceID: subjItem.token,
+              targetID: objItem.token,
+              type: 'Straight',
+              shape: {
+                type: 'UmlClassifier',
+                relationship: 'Aggregation'
+              }
+            })
+          }
+
+          if (relationConnection[j]?.type === 'inheritance') {
+            arrayWithNoDup.push({
+              id: `${subjItem.token}+${objItem.token}+${j}`,
+              sourceID: subjItem.token,
+              targetID: objItem.token,
+              type: 'Straight',
+              shape: {
+                type: 'UmlClassifier',
+                relationship: 'Inheritance'
+              }
+            })
+          }
+
+          if (relationConnection[j]?.type === 'dependency') {
+            arrayWithNoDup.push({
+              id: `${subjItem.token}+${objItem.token}+${j}`,
+              sourceID: subjItem.token,
+              targetID: objItem.token,
+              type: 'Straight',
+              shape: {
+                type: 'UmlClassifier',
+                relationship: 'Dependency'
+              }
+            })
+          }
+        })
+      })
+    }
+  })
+
+  return uniqueArrayOfObject(arrayWithNoDup)
+}
+
+/*
+export function relationshipConnectionArray(arrayOfArray) {
+  const { classes, relationships } = arrayOfArray
+  const arrayWithNoDup = []
+
+  classes.map((elements, i) => {
+    const relationConnection = relationships[i]
+    const subjectClass = elements.filter((item) => item.position === 'cl-subject')
+    const objectClass = elements.filter((item) => item.position === 'cl-object')
+
+    if (subjectClass.length > 0 && objectClass.length > 0) {
+      subjectClass.map((subjItem) => {
+        objectClass.map((objItem, j) => {
+          if (relationConnection[j]?.type === 'association') {
+            arrayWithNoDup.push({
               from: subjItem.token,
-              to:  objItem.token,
+              to: objItem.token,
               routing: go.Link.Orthogonal,
               relationshipType: relationConnection[j]?.type ?? 'none'
             })
@@ -154,7 +261,6 @@ export function relationshipConnectionArray(arrayOfArray) {
           //     relationshipType: relationConnection[j]?.type ?? 'none'
           //   })
           // }
-
         })
       })
     }
@@ -162,3 +268,4 @@ export function relationshipConnectionArray(arrayOfArray) {
 
   return uniqueArrayOfObject(arrayWithNoDup)
 }
+*/

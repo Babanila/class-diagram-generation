@@ -16,17 +16,16 @@
     "url": "git+https://github.com/Babanila/class-diagram-generation.git"
   },
   "keywords": [
-    "react",
-    "gojs",
-    "web",
     "uml",
-    "diagram"
+    "diagram",
+    "react",
+    "web",
+    "@syncfusion"
   ],
   "dependencies": {
+    "@syncfusion/ej2-react-diagrams": "^18.2.56",
     "clean-webpack-plugin": "^3.0.0",
     "emotion": "^10.0.27",
-    "gojs": "^2.1.23",
-    "gojs-react": "^1.0.8",
     "natural": "^2.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
