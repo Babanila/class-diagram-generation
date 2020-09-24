@@ -2,7 +2,6 @@ const lemmatize = require('wink-lemmatizer')
 
 // Actor Extractor
 export function actorExtraction(arr) {
-  console.log('input array to actorExtraction -> ',arr)
   const acexInheritanceRelationship = []
   const acexCompoundNoun = []
   const acexAllClasses = []

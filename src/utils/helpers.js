@@ -74,7 +74,7 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  const commonWords = ['system', 'application', 'detail', 'address']
+  const commonWords = ['system', 'application', 'classification', 'detail', 'address', 'types']
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(lemmatize.noun(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
@@ -89,8 +89,8 @@ export function addSyncFusionParametersToArray(arrayOfObject) {
   const modifiedArray = arrayOfObject.map((element, i) => {
     return {
       ...element,
-      offsetX: ( (i+1) * 50),
-      offsetY: ( i%2 === 0 )?  100 : 300,
+      offsetX: (i % 2 === 0) ? (i * 10) + 100 : (i * 10) + 300,
+      offsetY: (i * 5) + 100,
       annotations: [
         {
           id: element.token,
@@ -133,8 +133,8 @@ export function relationshipConnectionArray(arrayOfArray) {
           if (relationConnection[j]?.type === 'association') {
             arrayWithNoDup.push({
               id: `${subjItem.token}+${objItem.token}+${j}`,
-              sourceID: subjItem.token,
-              targetID: objItem.token,
+              sourceID: subjItem?.token ?? null,
+              targetID: objItem?.token ?? null,
               type: 'Straight',
               shape: {
                 type: 'UmlClassifier',

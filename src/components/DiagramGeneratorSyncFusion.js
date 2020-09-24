@@ -14,12 +14,12 @@ function DiagramGeneratorSyncFusion({ umlData }) {
   const realClasses = flattenWithNoDuplicateArray(umlData.classes, removeDuplicate, filterArrayByType)
   const relationshipConnection = relationshipConnectionArray(umlData)
 
-  const filteredRealClass = realClasses.reduce((acc, cls) => {
-    const { count, totalLength, percentApp } = appearancePercentage(umlData.userInput, cls.token)
-    return count > 0 ? acc.concat(cls) : acc
-  }, [])
+  // const filteredRealClass = realClasses.reduce((acc, cls) => {
+  //   const { count, totalLength, percentApp } = appearancePercentage(umlData.userInput, cls.token)
+  //   return count > 0 ? acc.concat(cls) : acc
+  // }, [])
 
-  const modifiedClasses = addSyncFusionParametersToArray(filteredRealClass)
+  const modifiedClasses = addSyncFusionParametersToArray(realClasses)
   const nodes = [...modifiedClasses]
   const connectors = [].concat(...relationshipConnection)
 
@@ -27,7 +27,7 @@ function DiagramGeneratorSyncFusion({ umlData }) {
     <DiagramComponent
       id="diagram"
       width="100%"
-      height="600px"
+      height={"600px"}
       nodes={nodes}
       connectors={connectors}
       // Defines the default properties for the node
