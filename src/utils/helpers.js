@@ -5,14 +5,14 @@ const lemmatize = require('wink-lemmatizer')
 export const UserInputData = React.createContext()
 
 export const initialState = {
-  userInput:
-    'The Library system is used by the Informatics Students and Faculty. The Library contains Books and Journals. Books can be issued to both the Students and Faculty. Journals can only be issued to the Faculty. Books and Journals can only be issued by the Librarian. The deputy-Librarian is in-charge of receiving the Returned Books and Journals. The Accountant is responsible for receiving the fine for over-due Books. Fine is charged only to Students, and not to the Faculty.',
-  // 'The cashier stored the customer details like  customer_name, customer_age,  and customer_address. The player saved the club details which includes the club name, club age,  and club address.',
+  userInput: '',
   classes: [],
   attributes: [],
   relationships: [],
   compoundNoun: []
 }
+
+
 
 export function breakSentences(inputString, inputSymbol) {
   return inputString
@@ -52,7 +52,6 @@ export function appearancePercentage(str, word) {
     .trim()
     .split(/[ .]+/)
     .filter((x) => lemmatize.noun(x.toLowerCase()) == lemmatize.noun(word.toLowerCase())).length
-  // .filter((x) => x.toUpperCase() == word.toUpperCase()).length
 
   const totalLength = str.length
   const percentApp = count / totalLength
@@ -75,8 +74,7 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  // const commonWords = ['system', 'application', 'detail', 'address']
-  const commonWords = []
+  const commonWords = ['system', 'application', 'detail', 'address']
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(lemmatize.noun(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
@@ -91,8 +89,8 @@ export function addSyncFusionParametersToArray(arrayOfObject) {
   const modifiedArray = arrayOfObject.map((element, i) => {
     return {
       ...element,
-      offsetX: (i + 1) * 50,
-      offsetY: (i + 1) * 50,
+      offsetX: ( (i+1) * 50),
+      offsetY: ( i%2 === 0 )?  100 : 300,
       annotations: [
         {
           id: element.token,
@@ -204,68 +202,4 @@ export function relationshipConnectionArray(arrayOfArray) {
   return uniqueArrayOfObject(arrayWithNoDup)
 }
 
-/*
-export function relationshipConnectionArray(arrayOfArray) {
-  const { classes, relationships } = arrayOfArray
-  const arrayWithNoDup = []
 
-  classes.map((elements, i) => {
-    const relationConnection = relationships[i]
-    const subjectClass = elements.filter((item) => item.position === 'cl-subject')
-    const objectClass = elements.filter((item) => item.position === 'cl-object')
-
-    if (subjectClass.length > 0 && objectClass.length > 0) {
-      subjectClass.map((subjItem) => {
-        objectClass.map((objItem, j) => {
-          if (relationConnection[j]?.type === 'association') {
-            arrayWithNoDup.push({
-              from: subjItem.token,
-              to: objItem.token,
-              routing: go.Link.Orthogonal,
-              relationshipType: relationConnection[j]?.type ?? 'none'
-            })
-          }
-
-          // if(relationConnection[j]?.type === 'composition'){
-          //   arrayWithNoDup.push ({
-          //     from: subjItem.token,
-          //     to:  objItem.token,
-          //     routing: go.Link.Orthogonal,
-          //     relationshipType: relationConnection[j]?.type ?? 'none'
-          //   })
-          // }
-
-          // if(relationConnection[j]?.type === 'aggregation'){
-          //   arrayWithNoDup.push ({
-          //     from: subjItem.token,
-          //     to:  objItem.token,
-          //     routing: go.Link.Orthogonal,
-          //     relationshipType: relationConnection[j]?.type ?? 'none'
-          //   })
-          // }
-
-          // if(relationConnection[j]?.type === 'inheritance'){
-          //   arrayWithNoDup.push ({
-          //     from: subjItem.token,
-          //     to:  objItem.token,
-          //     routing: go.Link.Orthogonal,
-          //     relationshipType: relationConnection[j]?.type ?? 'none'
-          //   })
-          // }
-
-          // if(relationConnection[j]?.type === 'dependency'){
-          //   arrayWithNoDup.push ({
-          //     from: subjItem.token,
-          //     to:  objItem.token,
-          //     routing: go.Link.Orthogonal,
-          //     relationshipType: relationConnection[j]?.type ?? 'none'
-          //   })
-          // }
-        })
-      })
-    }
-  })
-
-  return uniqueArrayOfObject(arrayWithNoDup)
-}
-*/

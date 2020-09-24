@@ -2,6 +2,7 @@ const lemmatize = require('wink-lemmatizer')
 
 // Actor Extractor
 export function actorExtraction(arr) {
+  console.log('input array to actorExtraction -> ',arr)
   const acexInheritanceRelationship = []
   const acexCompoundNoun = []
   const acexAllClasses = []
@@ -93,7 +94,6 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
           allClasses.push({
             ...arr[k],
             id: arr[k].token,
-            // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',
@@ -120,7 +120,6 @@ export function classExtraction(arr, removeDuplicate, removeCommonWords) {
           allClasses.push({
             ...arr[k],
             id: arr[k].token,
-            // token: `${arr[k].token}-${arr[k + 1]?.token}`,
             initIndex: i,
             index: k,
             type: 'class',

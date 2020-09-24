@@ -1,6 +1,8 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { css, cx } from 'emotion'
+import SingleButton from './SingleButton'
+import ComponentDetails from './ComponentDetails'
 import {
   UserInputData,
   breakSentences,
@@ -16,8 +18,6 @@ import {
   attributesExtraction,
   umlComponentExtraction
 } from '../utils/parsers'
-import SingleButton from './SingleButton'
-import ComponentDetails from './ComponentDetails'
 
 const umlCompDiv = css`
   margin-top: 75px;
@@ -155,7 +155,7 @@ function UMLComponent() {
 
   const history = useHistory()
   const str = state.userInput
-
+  
   React.useEffect(() => {
     getClassAndReplAndAss(str)
   }, [str])
@@ -205,7 +205,7 @@ function UMLComponent() {
   }
 
   const handleGoBack = () => history.push('/')
-  const handleDiagramGeneration = async () => history.push('/uml-diagram')
+  const handleDiagramGeneration = () => history.push('/uml-diagram')
 
   const showClassDetails = async (id) => {
     const breakedString = await breakSentences(str, '.')
