@@ -74,7 +74,7 @@ export function displayArrayValues(arr) {
 }
 
 export function removeGeneralizedWords(arrayOfObject) {
-  const commonWords = ['system', 'application', 'classification', 'detail', 'address', 'types']
+  const commonWords = ['system', 'application', 'informatic', 'classification', 'detail', 'address', 'types']
   return arrayOfObject.reduce((acc, item) => {
     return commonWords.includes(lemmatize.noun(item.token.toLowerCase())) ? acc : acc.concat(item)
   }, [])
