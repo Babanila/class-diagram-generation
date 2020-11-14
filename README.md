@@ -1,8 +1,9 @@
-# Class-Diagram-Generation Application
+# Class-Diagram-Generation
 
-### Overview of Class-Diagram-Generation Application
+### Overview of Class-Diagram-Generation
 
 The Class-Diagram-Generation was created as a web application that is use to visualise the automatic generation of class diagrams from sorce code (texts).
+
 
 ### Components
 
@@ -14,15 +15,11 @@ The Class-Diagram-Generation application is developed using Nodejs, React and Sy
 -   [Requirements](#requirements)
 -   [Usage](#usage)
 
+
 ### Features
 
 -   Show all sentences in a source code.
--   Show the list of classes in a specific sentence.
--   Show the list of Attributes in a specific sentence.
--   Show the list of Associations in a specific sentence.
--   Show the list of Composition in a specific sentence.
--   Show the list of Aggregation in a specific sentence.
--   Show the list of Inheritance in a specific sentence.
+-   Show the list of classes, Attributes, Associations, Composition, Aggregation and Inheritance in a specific sentence if exist.
 -   Show all the class diagrams in a source code with their respective relationships.
 
 
@@ -40,7 +37,11 @@ Make sure you have installed all of the following prerequisites on your developm
 
 -   A working internet (`To clone the git repository`).
 
-### How to start Class-Diagram-Generation Application
+
+
+### Usage
+
+#### How to start Class-Diagram-Generation
 
 -   Open computer terminal (`command-line interface`).
 -   Locate the downloaded class-diagram-generation folder.
@@ -49,11 +50,8 @@ Make sure you have installed all of the following prerequisites on your developm
 -   Run `yarn start`. (The app will start automatically)
 
 
-### How to use Class-Diagram-Generation Application
 
-To use class-diagram-generation , follow the steps below.
-
-### STEPS
+#### How to use Class-Diagram-Generation
 
 -   After starting the app.
 -   If the App doesn't open in a web browser, open a web browswer and enter the localhost address using port 8080 (`e.g http://localhost:8080`)
